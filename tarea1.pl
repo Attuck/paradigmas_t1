@@ -20,6 +20,6 @@ listap([X|Y]) :- listap(Y).
 % bpp(+N,+A,-S): S es el subárbol de A cuya raíz es N; S debe ser nil si el subárbol no existe
 %
 bpp(N,[],S):- S = nil, !.
-bpp(N,[N|T],S):- S =[N|T], !.
-bpp(N,[H|T],S):- listap(H), bpp(N,H,S), !.
-bpp(N,[H|T],S):- bpp(N,T,S), !.
+bpp(N,[N|T],S):- format('~w ',[N]), S =[N|T], !.
+bpp(N,[H|T],S):- listap(H), bpp(N,H,S),!.
+bpp(N,[H|T],S):- format('~w ',[H]), bpp(N,T,S), !.
