@@ -23,3 +23,26 @@ bpp(N,[H|T],S):- not(is_list(H)), format('~w ',[H]), bpp(N,T,S), !.
 %cartesiano(+A,+B,-C)
 cartesiano(A,B,C):- is_list(A), is_list(B),findall([X,Y],(member(X,A),member(Y,B)),C), !.
 cartesiano(A,B,C) :- C = [].
+
+
+
+rotacircular([H|T],R):- append(T,[H],R).
+    
+    
+reversa([X],[X]).
+reversa([X|M],Z) :- reversa(M,S), append(S,[X],Z).
+
+
+encripta(He,Ae,As,Hs,Ef):-
+  Hs=[],
+  reversa(As, AsR),
+  deverdadEncripta(He,Ae,AsR,Hs,Ef).
+  
+deverdadEncripta([],[AeH|AeT],[AsH|AsT],Hs,Ef):- Ef = [AeH,AsH],!.
+
+deverdadEncripta(He,Ae,As,Hs,Ef):-
+	comparaHeader(He,Ae),[AsH|_]=As, append(Hs,AsH,Hs1), write(Hs1),[_|HeT]=He, deverdadEncripta(HeT,Ae,As,Hs1,Ef).
+deverdadEncripta(He,Ae,As,Hs,Ef):-
+	not(comparaHeader(He,Ae)), rotacircular(Ae, Rae), rotacircular(As, Ras), deverdadEncripta(He,Rae,Ras,Hs,Ef).
+
+comparaHeader([H|_],[H|_]).
