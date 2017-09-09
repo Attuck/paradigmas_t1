@@ -19,3 +19,7 @@ bpp(N,[N|T],S):- format('~w ',[N]), S = [N|T], !.
 bpp(N,[H|T],S):- is_list(H), length(H, L), L > 0, bpp(N,H,S),!.
 bpp(N,[H|T],S):- is_list(H), bpp(N,T,S), !.
 bpp(N,[H|T],S):- not(is_list(H)), format('~w ',[H]), bpp(N,T,S), !.
+
+%cartesiano(+A,+B,-C)
+cartesiano(A,B,C):- is_list(A), is_list(B),findall([X,Y],(member(X,A),member(Y,B)),C), !.
+cartesiano(A,B,C) :- C = [].
