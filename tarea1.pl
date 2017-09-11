@@ -1,11 +1,11 @@
 % ------------------------------------------------------------------------------
 %
 % CI-1441 Paradigmas computacionales
-% II-2017, Prof. Alvaro de la Ossa O., Dr.rer.nat.
+% II-2017, Prof. Alvaro de la Ossa O.
 %
 % Tarea 1
 % Ricardo Apú
-% Óscar Corella
+% Óscar Corella B32080
 %
 % ------------------------------------------------------------------------------
 % 1. Predicados para el procesamiento de árboles y conjuntos
@@ -18,9 +18,23 @@ bpp(N,[H|_],S):- is_list(H), length(H, L), L > 0, bpp(N,H,S),!.
 bpp(N,[H|T],S):- is_list(H), bpp(N,T,S), !.
 bpp(N,[H|T],S):- not(is_list(H)), format('~w ',[H]), bpp(N,T,S), !.
 
+
+primero([X|Y],X) :- !.
+%bap p(+N,+A,-S): S es el subarbol de A cuya raiz es N
+bap(N,[N|T],S):- format('~w ',[N]), S = [N|T], !.
+bap(N,[H|T],S):- is_list(H), length(H, L), L > 0, primero(H,F), format('~w ',[F]),!,bap(N,T,S),bap(N,[_|H],S),!.
+bap(N,[H|T],S):- not(is_list(H)), format('~w ',[H]), bap(N,T,S), !.
+
+
 %cartesiano(+A,+B,-C)
 cartesiano(A,B,C):- is_list(A), is_list(B),findall([X,Y],(member(X,A),member(Y,B)),C), !.
 cartesiano(_,_,C) :- C = [].
+
+%potencia(+C,-P) P es el conjunto de potencia de C
+potencia(C, P) :- not(is_list(C)), P = [].
+potencia([], []).
+potencia([H|T], P) :- potencia(T,P).
+potencia([H|T], [H|P]) :-  potencia(T,P).
 
 
 
