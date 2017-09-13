@@ -4,8 +4,8 @@
 % II-2017, Prof. Alvaro de la Ossa O.
 %
 % Tarea 1
-% Ricardo Apú
-% Óscar Corella B32080
+% Ricardo Apú C B40399
+% Óscar Corella Q B32080
 %
 % ------------------------------------------------------------------------------
 % 1. Predicados para el procesamiento de árboles y conjuntos
