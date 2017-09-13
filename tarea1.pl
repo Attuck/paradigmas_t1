@@ -10,9 +10,12 @@
 % ------------------------------------------------------------------------------
 % 1. Predicados para el procesamiento de árboles y conjuntos
 %
-% bpp(+N,+A,-S): S es el subárbol de A cuya raíz es N; S debe ser nil si el subárbol no existe
-%
-%bpp(N,[],S)!.
+% bpp/3 (+N,+A,-S): S es el subárbol de A cuya raíz es N siendo recorrido en profundidad primero;
+% N nodo raiz que buscamos
+%S subarbol de A cuya raiz es N
+%bpp(d,[a,b,[c,d,e],[f,[g,h],i]],X) → X = d; despliegue:a b c d
+
+
 bpp(N,[N|T],S):- format('~w ',[N]), S = [N|T], !.
 bpp(N,[H|_],S):- is_list(H), length(H, L), L > 0, bpp(N,H,S),!.
 bpp(N,[H|T],S):- is_list(H), bpp(N,T,S), !.
@@ -20,12 +23,12 @@ bpp(N,[H|T],S):- not(is_list(H)), format('~w ',[H]), bpp(N,T,S), !.
 
 
 primero([X|Y],X) :- !.
-%bap p(+N,+A,-S): S es el subarbol de A cuya raiz es N
-% bap(N,[N|T],S):- format('~w ',[N]), S = [N|T], !.
-% bap(N,[[H1|T1]|T],S):-  format('~w ',[H1]),!,bap(N,T,S),bap(N,T1,S),!.
-% bap(N,[H|T],S):- not(is_list(H)), format('~w ',[H]), bap(N,T,S), !.
-% bap(_,[],_):-!.
 
+
+% bap/3 (+N,+A,-S): S es el subárbol de A cuya raíz es N siendo recorrido en anchura primero;
+% N nodo raiz que buscamos
+%S subarbol de A cuya raiz es N
+%bap(d,[a,b,[c,d,e],[f,[g,h],i]],X) → X = d; despliegue:a b c f d
 bap(N,L,S):-
 getHeads(L,Lh),
 not(member(Lh,N)),
@@ -60,11 +63,18 @@ printElements([H|T],N):-write(H),printElements(T,N).
 
 
 
-%cartesiano(+A,+B,-C)
+%cartesiano/3(+A,+B,-C) : es el producto cartesiano de A y B
+%A es la primera lista
+%B es la segunda lista
+%C es la lista con  el producto cartesiando de A y B
+%validacion: A y B tienen que ser lsitas.
 cartesiano(A,B,C):- is_list(A), is_list(B),findall([X,Y],(member(X,A),member(Y,B)),C), !.
 cartesiano(_,_,C) :- C = [].
 
 %potencia(+C,-P) P es el conjunto de potencia de C
+%C es la lista
+%P es todo el conjunto de potencias
+%validacion: C debe ser una lista, en caso contrario devuelve una lista vacia.
 potencia(C, P) :- not(is_list(C)), P = [].
 potencia([], []).
 potencia([H|T], P) :- potencia(T,P).
@@ -83,8 +93,18 @@ reversa([X|M],Z) :- reversa(M,S), append(S,[X],Z).
 %true si los primeros elementos de dos listas son iguales
 comparaHeader([H|_],[H|_]).
 
-% encripta(+He,+Ae,+As,-Hs,-Ef): Hs es el resultado de encriptar la hilera de entrada He con un
-% engranaje formado por los alfabetos de entrada (Ae) y salida (As); Ef es el estado final de la máquina
+% encripta(+He,+Ae,+As,-Hs,-Ef): encripta una hilera de un alfabeto de entrada, en una hilera de un alfabeto de salida
+%He es la hilera de entrada a encriptar
+%Hs es el resultado de encriptar la hilera de entrada He con un
+%Ae es el alfabeto de entrada
+%As es el alfabeto de salida
+%EF es el estado final de la maquina
+% ej:
+%encripta([c,a,c,a],[a,b,c,d],[1,2,3,4],HS,EF).
+%HS = [2, 4, 2, 4],
+%EF = [a, 4].
+
+
 encripta(He,Ae,As,Hs,Ef):-
   reversa(As, AsR),
   deverdadEncripta(He,Ae,AsR,[],Hs,Ef), !.
@@ -109,6 +129,14 @@ deverdadEncripta(He,Ae,As,HHs,Hs,Ef):-
 % decripta(+Hs,+Ae,+As,+Ef,-He), que decodifica la hilera encriptada Hs usando los alfabetos Ae y As,
 % iniciando en la posición del engranaje descrita por el estado final de la máquina (Ef) cuando se encriptó
 % la hilera que produjo la hilera Hs.
+%HS: Hilera que produjo encriptada
+%AE: alfabeto de entrada de la hilera que fue encriptada
+%AS : alfabeto de la hilera que queremos desencriptar
+%EF: estado final de la encripcion
+%HE: hilera resultante de desencriptar
+%ej: Basandonos en el ejemplo del encriptada
+%decripta([2,4,2,4],[a,b,c,d],[1,2,3,4],[a,4],HE).
+%HE = [c, a, c, a].
 
 decripta(Hs,Ae,As,[E,S],He):-
   reversa(As, AsR),
