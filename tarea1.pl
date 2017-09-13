@@ -10,6 +10,7 @@
 % ------------------------------------------------------------------------------
 % 1. Predicados para el procesamiento de árboles y conjuntos
 %
+% Predicado de recorrido en profundidad primero.
 % bpp/3 (+N,+A,-S): S es el subárbol de A cuya raíz es N siendo recorrido en profundidad primero;
 % N nodo raiz que buscamos
 %S subarbol de A cuya raiz es N
@@ -24,7 +25,7 @@ bpp(N,[H|T],S):- not(is_list(H)), format('~w ',[H]), bpp(N,T,S), !.
 
 primero([X|Y],X) :- !.
 
-
+% Predicado de recorrido en anchura primero.
 % bap/3 (+N,+A,-S): S es el subárbol de A cuya raíz es N siendo recorrido en anchura primero;
 % N nodo raiz que buscamos
 %S subarbol de A cuya raiz es N
@@ -62,7 +63,7 @@ printElements([X|[]],_):-format('~w ',[X]).
 printElements([H|T],N):-format('~w ',[H]),printElements(T,N).
 
 
-
+% Predicado del producto cartesiano.
 %cartesiano/3(+A,+B,-C) : es el producto cartesiano de A y B
 %A es la primera lista
 %B es la segunda lista
@@ -71,6 +72,7 @@ printElements([H|T],N):-format('~w ',[H]),printElements(T,N).
 cartesiano(A,B,C):- is_list(A), is_list(B),findall([X,Y],(member(X,A),member(Y,B)),C), !.
 cartesiano(_,_,C) :- C = [].
 
+% Predicado del conjunto potencia
 %potencia(+C,-P) P es el conjunto de potencia de C
 %C es la lista
 %P es todo el conjunto de potencias
@@ -80,9 +82,12 @@ potencia([], []).
 potencia([H|T], P) :- potencia(T,P).
 potencia([H|T], [H|P]) :-  potencia(T,P).
 
-
-
-
+% ------------------------------------------------------------------------------
+%
+% 2. La máquina encriptadora
+%
+% Predicados de ayuda para los de encriptar y decriptar.
+%
 %rota una lista circularmente
 rotacircular([H|T],R):- append(T,[H],R).
 
@@ -93,6 +98,7 @@ reversa([X|M],Z) :- reversa(M,S), append(S,[X],Z).
 %true si los primeros elementos de dos listas son iguales
 comparaHeader([H|_],[H|_]).
 
+% Predicado de encriptación basado en un engranaje de alfabetos.
 % encripta(+He,+Ae,+As,-Hs,-Ef): encripta una hilera de un alfabeto de entrada, en una hilera de un alfabeto de salida
 %He es la hilera de entrada a encriptar
 %Hs es el resultado de encriptar la hilera de entrada He con un
@@ -126,6 +132,7 @@ deverdadEncripta(He,Ae,As,HHs,Hs,Ef):-
   rotacircular(As, Ras),
   deverdadEncripta(He,Rae,Ras,HHs,Hs,Ef).
 
+% Predicado de decriptación basado en un engranaje de alfabetos.
 % decripta(+Hs,+Ae,+As,+Ef,-He), que decodifica la hilera encriptada Hs usando los alfabetos Ae y As,
 % iniciando en la posición del engranaje descrita por el estado final de la máquina (Ef) cuando se encriptó
 % la hilera que produjo la hilera Hs.
