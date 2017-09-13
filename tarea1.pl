@@ -80,8 +80,8 @@ decripta(Hs,Ae,As,[E,S],He):-
   reversa(As, AsR),
   moverAEstadoInicial(Ae,E,AeN),
   moverAEstadoInicial(AsR,S,AsN),
-  deverdadDecripta(Hs,AeN,AsN,[],HeR),
-  reversa(HeR,He),!.
+  deverdadDecripta(Hs,AeN,AsN,[],He),
+  !.
 
 deverdadDecripta([],[_|_],[_|_],HHe,He):-
     He = HHe,!.
@@ -99,8 +99,7 @@ deverdadDecripta(Hs,Ae,As,HHe,He):-
   rotacircular(As, Ras),
   deverdadDecripta(Hs,Rae,Ras,HHe,He).
 
-moverAEstadoInicial([H|T],H,LN):-
-  LN = [H|T].
+moverAEstadoInicial([H|T],H,[H|T]).
 moverAEstadoInicial(L,H,LN):-
   rotacircular(L, L1),
   moverAEstadoInicial(L1,H,LN).
