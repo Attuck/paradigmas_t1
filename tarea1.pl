@@ -31,14 +31,14 @@ primero([X|Y],X) :- !.
 %bap(d,[a,b,[c,d,e],[f,[g,h],i]],X) → X = d; despliegue:a b c f d
 bap(N,L,S):-
 getHeads(L,Lh),
-not(member(Lh,N)),
+not(member(N,Lh)),
 printElements(Lh,N),
 getTails(L,Lt),
 bap(N,Lt,S).
 
 bap(N,L,S):-
 getHeads(L,Lh),
-member(Lh,N),
+member(N,Lh),
 printElements(Lh,N),
 getTree(L,N,S).
 
@@ -53,13 +53,13 @@ getHead(X,X):-atomic(X).
 getHead([X|_],X).
 
 getTails([],[]).
-getTails([X|Xr],[Y|Yr]):-getTail(X,Y),getTails(Xr,Yr).
-getTail(X,_):-atomic(X).
+getTails([X|Xr],Y):-getTail(X,Y1),getTails(Xr,Y2), append(Y1,Y2,Y).
+getTail(X,[]):-atomic(X).
 getTail([_|X],X).
 
-printElements([N|_],N):-write(N).
-printElements([X|[]],_):-write(X).
-printElements([H|T],N):-write(H),printElements(T,N).
+printElements([N|_],N):-format('~w ',[N]).
+printElements([X|[]],_):-format('~w ',[X]).
+printElements([H|T],N):-format('~w ',[H]),printElements(T,N).
 
 
 
