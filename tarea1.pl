@@ -40,7 +40,7 @@ bap(N,L,S):-
 getHeads(L,Lh),
 member(N,Lh),
 printElements(Lh,N),
-getTree(L,N,S).
+getTree(L,N,S),!.
 
 getTree([N|T],N,N).
 getTree([[N|T1]|T],N,[N|T1]).
