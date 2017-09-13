@@ -59,8 +59,8 @@ getTail(X,[]):-atomic(X).
 getTail([_|X],X).
 
 printElements([N|_],N):-format('~w ',[N]).
-printElements([X|[]],_):-format('~w ',[X]).
-printElements([H|T],N):-format('~w ',[H]),printElements(T,N).
+printElements([X|[]],_):-!,format('~w ',[X]).
+printElements([H|T],N):-!,format('~w ',[H]),printElements(T,N).
 
 
 % Predicado del producto cartesiano.
