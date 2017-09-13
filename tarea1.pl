@@ -21,9 +21,43 @@ bpp(N,[H|T],S):- not(is_list(H)), format('~w ',[H]), bpp(N,T,S), !.
 
 primero([X|Y],X) :- !.
 %bap p(+N,+A,-S): S es el subarbol de A cuya raiz es N
-bap(N,[N|T],S):- format('~w ',[N]), S = [N|T], !.
-bap(N,[H|T],S):- is_list(H), length(H, L), L > 0, primero(H,F), format('~w ',[F]),!,bap(N,T,S),bap(N,[_|H],S),!.
-bap(N,[H|T],S):- not(is_list(H)), format('~w ',[H]), bap(N,T,S), !.
+% bap(N,[N|T],S):- format('~w ',[N]), S = [N|T], !.
+% bap(N,[[H1|T1]|T],S):-  format('~w ',[H1]),!,bap(N,T,S),bap(N,T1,S),!.
+% bap(N,[H|T],S):- not(is_list(H)), format('~w ',[H]), bap(N,T,S), !.
+% bap(_,[],_):-!.
+
+bap(N,L,S):-
+getHeads(L,Lh),
+not(member(Lh,N)),
+printElements(Lh,N),
+getTails(L,Lt),
+bap(N,Lt,S).
+
+bap(N,L,S):-
+getHeads(L,Lh),
+member(Lh,N),
+printElements(Lh,N),
+getTree(L,N,S).
+
+getTree([N|T],N,N).
+getTree([[N|T1]|T],N,[N|T1]).
+getTree([H|T],N,S):-getTree(T,N,S).
+
+
+getHeads([],[]).
+getHeads([X|Xr],[Y|Yr]):-getHead(X,Y),getHeads(Xr,Yr).
+getHead(X,X):-atomic(X).
+getHead([X|_],X).
+
+getTails([],[]).
+getTails([X|Xr],[Y|Yr]):-getTail(X,Y),getTails(Xr,Yr).
+getTail(X,_):-atomic(X).
+getTail([_|X],X).
+
+printElements([N|_],N):-write(N).
+printElements([X|[]],_):-write(X).
+printElements([H|T],N):-write(H),printElements(T,N).
+
 
 
 %cartesiano(+A,+B,-C)
